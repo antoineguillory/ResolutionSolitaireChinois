@@ -1,7 +1,7 @@
-#Resolution d'un Solitaire Chinois - Projet d'études - Antoine GUILLORY
+# Resolution d'un Solitaire Chinois - Projet d'études - Antoine GUILLORY#
 
 
-##Description
+## Description
 
 Le solitaire chinois est un jeu à un seul joueur qui se joue avec 32 billes qui
 sont disposées de manière à occuper toutes les cavités à exception de celle
@@ -22,7 +22,7 @@ Le but de ce projet est de programmer par rebroussement, une intelligence
 artificielle qui permette de résoudre le solitaire chinois où la position de
 la case vide peut être choisie par l’utilisateur.
 
-##Annexes
+## Annexes
 
 Projet réalisé en Java8 (JavaSE 1.8)
 Outils logiciels utilisés : StarUML, Eclipse
