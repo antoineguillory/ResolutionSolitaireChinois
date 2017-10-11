@@ -1,4 +1,4 @@
-# Resolution d'un Solitaire Chinois - Projet d'études - Antoine GUILLORY
+# Resolution d'un Solitaire Chinois - Projet d'études - Florent Durécu , Antoine Guillory, David Saude
 
 
 ## Description
