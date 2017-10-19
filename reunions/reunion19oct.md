@@ -1,5 +1,4 @@
 # Réunion du 19/10
-======
 ## Méthode brute : Objectif, finir cette méthode pour mi novembre
 
 ### Modèle mathématique
