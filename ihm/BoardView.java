@@ -2,6 +2,7 @@ package ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -31,7 +32,11 @@ public class BoardView {
 		private JPanel CGL; 
 		private JPanel SBL;
 			private JPanel SBLN;
+				private JLabel ChosenStart;
+				private JLabel ChosenEnd;
 			private JPanel SBLS;
+				private JButton ResetBtn;
+				private JButton ConfirmBtn;
 		
 	/*
 	 * @author Antoine Guillory
@@ -49,7 +54,7 @@ public class BoardView {
 				MainWindow.add(MainPanel);
 				NFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
 					MainPanel.add(NFL, BorderLayout.NORTH);
-					BestShot = new JLabel();
+					BestShot = new JLabel("?");
 					NFL.add(new JLabel("Meilleur coup : "));
 					NFL.add(BestShot);
 					NFLFL = new JPanel(new FlowLayout(FlowLayout.TRAILING));{
@@ -61,9 +66,29 @@ public class BoardView {
 					}
 					NFL.add(NFLFL);
 				}
-				MainPanel.add(NFL);
+				MainPanel.add(NFL, BorderLayout.NORTH);
 				this.initializeGrid();
-				MainPanel.add(CGL, BorderLayout.NORTH);	
+				MainPanel.add(CGL, BorderLayout.CENTER);
+				SBL = new JPanel(new BorderLayout());{
+					SBLN = new JPanel(); {
+						SBLN.add(new JLabel("Depart choisi : "));
+						ChosenStart = new JLabel("?");
+						SBLN.add(ChosenStart);
+						SBLN.add(new JLabel("Arrivée choisie : "));
+						ChosenEnd = new JLabel("?");
+						SBLN.add(ChosenEnd);
+						SBL.add(SBLN, BorderLayout.NORTH);
+					}
+					SBLS = new JPanel(); {
+						ResetBtn = new JButton("Reset");
+						SBLS.add(ResetBtn);
+						ConfirmBtn = new JButton("Confirm");
+						SBLS.add(ConfirmBtn);
+						SBL.add(SBLS, BorderLayout.SOUTH);
+					}
+				}
+				MainPanel.add(SBL, BorderLayout.SOUTH);
+				
 			}
 		}
 		MainWindow.add(MainPanel);
@@ -80,12 +105,14 @@ public class BoardView {
 			for(Integer i = 0; i!=49;++i){
 				if(badPos.contains(i)){
 					JButton badBtn = new JButton("X");
+					badBtn.setPreferredSize(new Dimension(30,30));
 					badBtn.setForeground(Color.RED);
 					CGL.add(badBtn);
 					continue;
 				}
 				JButton goodBtn = new JButton(realNumerotation.toString());
 				goodBtn.setForeground(Color.GREEN);
+				goodBtn.setPreferredSize(new Dimension(30,30));
 				CGL.add(goodBtn);
 				++realNumerotation;
 			}
