@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -21,6 +25,7 @@ public class BoardView {
 	 * 
 	 * 
 	 */
+	private static final Integer[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
 	
 	private JFrame MainWindow;
 	private JPanel MainPanel;
@@ -37,16 +42,20 @@ public class BoardView {
 			private JPanel SBLS;
 				private JButton ResetBtn;
 				private JButton ConfirmBtn;
+				
+	private HashMap<Integer, JButton> GridButtons;
+	private IHMState state;
 		
 	/*
 	 * @author Antoine Guillory
 	 */
 	public BoardView(){
+		state = IHMState.DO_NOTHING;
 		initializeComponents();
+		defineListeners();
 	}
 	
 	private void initializeComponents(){
-		
 		MainWindow = new JFrame();{
 			MainWindow.setVisible(true);
 			MainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,7 +66,7 @@ public class BoardView {
 					BestShot = new JLabel("?");
 					NFL.add(new JLabel("Meilleur coup : "));
 					NFL.add(BestShot);
-					NFLFL = new JPanel(new FlowLayout(FlowLayout.TRAILING));{
+					NFLFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
 						NFL.add(NFLFL);
 						StartBtn = new JButton("Pos de départ");
 						NFLFL.add(StartBtn);
@@ -96,29 +105,57 @@ public class BoardView {
 	}
 	
 	private void initializeGrid(){
+		GridButtons = new HashMap<Integer, JButton>();
 		GridLayout manager = new GridLayout(7,7);
 		CGL = new JPanel(manager);{
 			ArrayList<Integer> badPos= new ArrayList<Integer>();
-			Integer[] badPosPrimitive = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
-			badPos.addAll(Arrays.asList(badPosPrimitive));
+			badPos.addAll(Arrays.asList(BAD_POS_PRIMITIVE));
 			Integer realNumerotation=1;
 			for(Integer i = 0; i!=49;++i){
 				if(badPos.contains(i)){
 					JButton badBtn = new JButton("X");
 					badBtn.setPreferredSize(new Dimension(30,30));
 					badBtn.setForeground(Color.RED);
-					CGL.add(badBtn);
+					GridButtons.put(i, badBtn);
+					CGL.add(GridButtons.get(i));
 					continue;
 				}
 				JButton goodBtn = new JButton(realNumerotation.toString());
 				goodBtn.setForeground(Color.GREEN);
 				goodBtn.setPreferredSize(new Dimension(30,30));
-				CGL.add(goodBtn);
+				GridButtons.put(i, goodBtn);
+				GridButtons.get(i).addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if(state==IHMState.SET_START){
+							ChosenStart.setText(((JButton) e.getSource()).getText());
+						}
+						if(state==IHMState.SET_END){
+							ChosenEnd.setText(((JButton) e.getSource()).getText());
+						}
+					}
+				});
+				CGL.add(GridButtons.get(i));
 				++realNumerotation;
 			}
 		}
 	}
-    public static void main(String[] args) {
+    
+	private void defineListeners() {
+		StartBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				state = IHMState.SET_START;
+			}
+		});
+		EndBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				state = IHMState.SET_END;
+			}
+		});
+	}
+	
+	
+	
+	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
