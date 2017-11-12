@@ -115,7 +115,7 @@ public interface IHole {
 	 * setNearHole est une méthode d'initialisation, utilisée dans la Hole Factory.
 	 * Elle permet d'assignée à un trou et une direction un certain trou.
 	 * 
-	 * @post : getNearHole(dir) == h
+	 * @post : getNearHole(dir) == h && h.getNearHole(- dir) == this
 	 */
 	
 	public void setNearHole(int dir, IHole h);
