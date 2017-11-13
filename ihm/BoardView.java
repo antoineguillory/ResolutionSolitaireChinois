@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.*;
 
@@ -43,7 +42,10 @@ public class BoardView {
 				private JButton ResetBtn;
 				private JButton ConfirmBtn;
 				
-	private HashMap<Integer, JButton> GridButtons;
+	private HashMap<Integer, GridJButton> GridButtons;
+	private ImageIcon Empty_Tile;
+	private ImageIcon Filled_Tile;
+	private ImageIcon Orange_Tile;
 	private IHMState state;
 		
 	/*
@@ -51,8 +53,15 @@ public class BoardView {
 	 */
 	public BoardView(){
 		state = IHMState.DO_NOTHING;
+		initializeImages();
 		initializeComponents();
 		defineListeners();
+	}
+	
+	private void initializeImages(){
+		Empty_Tile = new ImageIcon("img/empty_tile.png");
+		Filled_Tile = new ImageIcon("img/filled_tile.png");
+		Orange_Tile = new ImageIcon("img/orange_tile.png");
 	}
 	
 	private void initializeComponents(){
@@ -105,7 +114,7 @@ public class BoardView {
 	}
 	
 	private void initializeGrid(){
-		GridButtons = new HashMap<Integer, JButton>();
+		GridButtons = new HashMap<Integer, GridJButton>();
 		GridLayout manager = new GridLayout(7,7);
 		CGL = new JPanel(manager);{
 			ArrayList<Integer> badPos= new ArrayList<Integer>();
@@ -113,28 +122,33 @@ public class BoardView {
 			Integer realNumerotation=1;
 			for(Integer i = 0; i!=49;++i){
 				if(badPos.contains(i)){
-					JButton badBtn = new JButton("X");
+					GridJButton badBtn = new GridJButton(Orange_Tile, 0);
 					badBtn.setPreferredSize(new Dimension(30,30));
 					badBtn.setForeground(Color.RED);
-					GridButtons.put(i, badBtn);
-					CGL.add(GridButtons.get(i));
+					badBtn.setBackground(Color.RED);
+					CGL.add(badBtn);
 					continue;
 				}
-				JButton goodBtn = new JButton(realNumerotation.toString());
+				GridJButton goodBtn = new GridJButton(Filled_Tile, realNumerotation);
 				goodBtn.setForeground(Color.GREEN);
 				goodBtn.setPreferredSize(new Dimension(30,30));
-				GridButtons.put(i, goodBtn);
-				GridButtons.get(i).addActionListener(new ActionListener(){
+				GridButtons.put(realNumerotation, goodBtn);
+				GridButtons.get(realNumerotation).addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
+						System.out.println("Source = "+((GridJButton) e.getSource()).getNumerotation().toString());
+						
 						if(state==IHMState.SET_START){
-							ChosenStart.setText(((JButton) e.getSource()).getText());
+							ChosenStart.setText(((GridJButton) e.getSource()).getNumerotation().toString());
+							System.out.println("ChosenStart = "+ Integer.parseInt(ChosenStart.getText()));
+							GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenStart.getText()));
+							pointedBtn.setIcon(Empty_Tile);
 						}
 						if(state==IHMState.SET_END){
-							ChosenEnd.setText(((JButton) e.getSource()).getText());
+							ChosenEnd.setText(((GridJButton) e.getSource()).getNumerotation().toString());
 						}
 					}
 				});
-				CGL.add(GridButtons.get(i));
+				CGL.add(goodBtn);
 				++realNumerotation;
 			}
 		}
@@ -151,6 +165,10 @@ public class BoardView {
 				state = IHMState.SET_END;
 			}
 		});
+	}
+	
+	public HashMap<Integer, GridJButton> getButtons() {
+		return GridButtons;
 	}
 	
 	
