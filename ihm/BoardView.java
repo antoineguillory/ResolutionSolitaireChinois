@@ -134,12 +134,9 @@ public class BoardView {
 				goodBtn.setPreferredSize(new Dimension(30,30));
 				GridButtons.put(realNumerotation, goodBtn);
 				GridButtons.get(realNumerotation).addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						System.out.println("Source = "+((GridJButton) e.getSource()).getNumerotation().toString());
-						
+					public void actionPerformed(ActionEvent e){						
 						if(state==IHMState.SET_START){
 							ChosenStart.setText(((GridJButton) e.getSource()).getNumerotation().toString());
-							System.out.println("ChosenStart = "+ Integer.parseInt(ChosenStart.getText()));
 							GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenStart.getText()));
 							pointedBtn.setIcon(Empty_Tile);
 						}
