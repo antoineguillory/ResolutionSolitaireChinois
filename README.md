@@ -26,4 +26,6 @@ la case vide peut être choisie par l’utilisateur.
 
 Projet réalisé en Java8 (JavaSE 1.8)
 Outils logiciels utilisés : StarUML, Eclipse
-Documents consultés et ou utilisés : http://www.link.cs.cmu.edu/15859-s11/notes/peg-solitaire.pdf
+Documents consultés et ou utilisés :
+http://www.link.cs.cmu.edu/15859-s11/notes/peg-solitaire.pdf
+https://c.developpez.com/defis/2-Solitaire/
