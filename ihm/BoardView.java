@@ -28,17 +28,12 @@ public class BoardView {
 	
 	private JFrame MainWindow;
 	private JPanel MainPanel;
-		private JPanel NFL;
 			private JLabel BestShot;
-			private JPanel NFLFL;
 				private JButton StartBtn;
 				private JButton EndBtn;
 		private JPanel CGL; 
-		private JPanel SBL;
-			private JPanel SBLN;
 				private JLabel ChosenStart;
 				private JLabel ChosenEnd;
-			private JPanel SBLS;
 				private JButton ResetBtn;
 				private JButton ConfirmBtn;
 				
@@ -70,14 +65,14 @@ public class BoardView {
 		MainWindow = new JFrame();{
 			MainWindow.setVisible(true);
 			MainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			MainPanel = new JPanel(new BorderLayout());{
+			JPanel MainPanel = new JPanel(new BorderLayout());{
 				MainWindow.add(MainPanel);
-				NFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
+				JPanel NFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
 					MainPanel.add(NFL, BorderLayout.NORTH);
 					BestShot = new JLabel("?");
 					NFL.add(new JLabel("Meilleur coup : "));
 					NFL.add(BestShot);
-					NFLFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
+					JPanel NFLFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
 						NFL.add(NFLFL);
 						StartBtn = new JButton("Pos de départ");
 						NFLFL.add(StartBtn);
@@ -88,8 +83,8 @@ public class BoardView {
 				}
 				MainPanel.add(NFL, BorderLayout.NORTH);
 				this.initializeGrid();
-				SBL = new JPanel(new BorderLayout());{
-					SBLN = new JPanel(); {
+				JPanel SBL = new JPanel(new BorderLayout());{
+					JPanel SBLN = new JPanel(); {
 						SBLN.add(new JLabel("Depart choisi : "));
 						ChosenStart = new JLabel("?");
 						SBLN.add(ChosenStart);
@@ -98,7 +93,7 @@ public class BoardView {
 						SBLN.add(ChosenEnd);
 						SBL.add(SBLN, BorderLayout.NORTH);
 					}
-					SBLS = new JPanel(); {
+					JPanel SBLS = new JPanel(); {
 						ResetBtn = new JButton("Reset");
 						SBLS.add(ResetBtn);
 						ConfirmBtn = new JButton("Confirm");
