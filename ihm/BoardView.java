@@ -65,7 +65,7 @@ public class BoardView {
 		MainWindow = new JFrame();{
 			MainWindow.setVisible(true);
 			MainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			JPanel MainPanel = new JPanel(new BorderLayout());{
+			MainPanel = new JPanel(new BorderLayout());{
 				MainWindow.add(MainPanel);
 				JPanel NFL = new JPanel(new FlowLayout(FlowLayout.CENTER));{
 					MainPanel.add(NFL, BorderLayout.NORTH);
@@ -102,7 +102,6 @@ public class BoardView {
 					}
 				}
 				MainPanel.add(SBL, BorderLayout.SOUTH);
-				
 			}
 		}
 		MainWindow.add(MainPanel);
@@ -146,18 +145,33 @@ public class BoardView {
 				if(state==IHMState.SET_START){
 					ChosenStart.setText(((GridJButton) e.getSource()).getNumerotation().toString());
 					GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenStart.getText()));
+					resetImages();
 					pointedBtn.setIcon(Empty_Tile);
+					pointedBtn.setState(state);
 					state=IHMState.DO_NOTHING;
 				}
 				if(state==IHMState.SET_END){
 					ChosenEnd.setText(((GridJButton) e.getSource()).getNumerotation().toString());
 					GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenEnd.getText()));
+					resetImages();
 					pointedBtn.setIcon(End_Tile);
+					pointedBtn.setState(state);
 					state=IHMState.DO_NOTHING;
 				}
 			}
 		});
 		CGL.add(goodBtn);
+	}
+	
+	private void resetImages() {
+		for(GridJButton but: GridButtons.values()){
+			if(but.getState()==IHMState.DO_NOTHING) 
+				continue;
+			else if(but.getState()==IHMState.SET_START && state==IHMState.SET_START)
+				but.setIcon(Filled_Tile);
+			else if(but.getState()==IHMState.SET_END && state==IHMState.SET_END)
+				but.setIcon(Filled_Tile);
+		}
 	}
 	
 	private void defineListeners() {
