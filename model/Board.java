@@ -8,7 +8,8 @@ public class Board implements IBoard {
 	
 	//ATTRIBUTS
 	
-	private Set<IHole> setHole;//TODO
+	private Set<IHole> setHole;
+	//TODO
 	
 	//CONSTRUCTEURS
 	

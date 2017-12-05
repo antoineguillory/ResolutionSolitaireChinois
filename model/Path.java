@@ -1,7 +1,5 @@
 package model;
 
-import util.Contract;
-
 public class Path implements IPath {
 	
 	//ATTRIBUTS
@@ -11,24 +9,24 @@ public class Path implements IPath {
 	private StringBuffer bestMV;
 	private int curNB;
 	private StringBuffer curMV;
-	private int pegOut;
+	private int pegOutNB;
 	// ATTR à changer
-	private String start;
-	private String end;
+	private String pStart;
+	private String pEnd;
 	
 	//CONSTRUCTEURS
 	
 	public Path (int i, String start, String end) {
 		board = new Board(i);
-		curHole = null;
+		curHole = null;//TODO avec le board
 		bestNB = board.getHoleSet().size() + 1;
-		bestMV = null;
+		bestMV = new StringBuffer("");
 		curNB = 0;
-		curMV = null;
-		pegOut = 1;
+		curMV = new StringBuffer("");
+		pegOutNB = 1;
 		
-		this.start = start;
-		this.end = end;
+		this.pStart = start;
+		this.pEnd = end;
 	}
 	
 	//METHODES
@@ -65,15 +63,16 @@ public class Path implements IPath {
 
 	@Override
 	public int getPegOutNb() {
-		return pegOut;
+		return pegOutNB;
 	}
 
 	@Override
 	public void computePath() {
 		if (getPegOutNb() == 32) {
 			if (getBestNb() > getNb()
-					&& getCurrentHole().getPosition() == end) {
-				//TODO Modif du meilleur chemin et meilleur nb
+					&& getCurrentHole().getPosition() == pEnd) {
+				this.bestMV = this.curMV;
+				this.bestNB = this.curNB;
 				return;
 			}
 		}
@@ -82,6 +81,40 @@ public class Path implements IPath {
 		}
 		
 		// TODO Recursivité
+		for (IHole h : board.getHoleSet()) {
+			for (int dir = IHole.NORTH; dir <= IHole.WEST; dir++) {
+				if (h.possibleMove(dir)) {
+					String d = "";
+					switch (dir) {
+					case IHole.NORTH:
+						d = "N";
+						break;
+					case IHole.EAST:
+						d = "E";
+						break;
+					case IHole.SOUTH:
+						d = "S";
+						break;
+					case IHole.WEST:
+						d = "W";
+						break;
+					}
+					this.pegOutNB += 1;
+					this.curNB += 1;
+					StringBuffer savedcurMV = new StringBuffer(this.getMoves());
+					this.curMV.append(h.getPosition() 
+							+ d 
+							+ h.getNearHole(dir).getNearHole(dir).getPosition());
+					h.jumpTo(dir);
+					computePath();
+					this.pegOutNB -= 1;
+					this.curNB -= 1;
+					this.curMV = savedcurMV;
+					// A vérifier avec des pincettes et
+					// à compléter avec curHole
+				}
+			}
+		}
 	}
 
 }
