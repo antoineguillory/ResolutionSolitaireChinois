@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class HoleFactory {
 				
 			}
 		}
-		return (Set<IHole>) data.values();
+		return new HashSet<IHole> (data.values());
 	}
 	
 	private static boolean isIn (int [] t, int x) {
@@ -62,8 +63,8 @@ public class HoleFactory {
 	}
 	
 	private static String computeName (int i, int j) {
-		int c = columnBase + j;
-		int l = lineBase + i;
+		int c = lineBase + j;
+		int l = columnBase + i;
 		return "" + (char) l + (char) c;
 	}
 }

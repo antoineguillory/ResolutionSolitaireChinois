@@ -126,6 +126,23 @@ public class Hole implements IHole {
 		Contract.checkCondition(h != null && h != this);
 
 		voisin.put(dir, h);
+		if (! h.nearHoleHere(reverseDir(dir))) {
+			h.setNearHole(reverseDir(dir), this);
+		}
+	}
+	
+	private int reverseDir(int dir) {
+		switch (dir) {
+		case IHole.NORTH:
+			dir = IHole.SOUTH;
+		case IHole.EAST:
+			dir = IHole.WEST;
+		case IHole.SOUTH:
+			dir = IHole.NORTH;
+		case IHole.WEST:
+			dir = IHole.EAST;
+		}
+		return dir;
 	}
 
 }
