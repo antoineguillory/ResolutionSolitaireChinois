@@ -51,8 +51,12 @@ public class Hole implements IHole {
 	@Override
 	public boolean possibleMove(int dir) {
 		Contract.checkCondition(1 <= dir && dir <= 4);
-		Contract.checkCondition(! pegIn());
-		Contract.checkCondition(getNearHole(dir) != null && getNearHole(dir).getNearHole(dir) != null);
+		if (pegIn()) {
+			return false;
+		}
+		if (!(getNearHole(dir) != null && getNearHole(dir).getNearHole(dir) != null)) {
+			return false;
+		}
 
 		IHole o = getNearHole(dir);
 		IHole o2 = o.getNearHole(dir);
@@ -62,8 +66,12 @@ public class Hole implements IHole {
 	@Override
 	public boolean canMoveTo(int dir) {
 		Contract.checkCondition(1 <= dir && dir <= 4);
-		Contract.checkCondition(pegIn());
-		Contract.checkCondition(getNearHole(dir) != null && getNearHole(dir).getNearHole(dir) != null);
+		if (!pegIn()) {
+			return false;
+		}
+		if (!(getNearHole(dir) != null && getNearHole(dir).getNearHole(dir) != null)) {
+			return false;
+		}
 		
 		IHole o = getNearHole(dir);
 		IHole o2 = o.getNearHole(dir);
@@ -118,6 +126,23 @@ public class Hole implements IHole {
 		Contract.checkCondition(h != null && h != this);
 
 		voisin.put(dir, h);
+		if (! h.nearHoleHere(reverseDir(dir))) {
+			h.setNearHole(reverseDir(dir), this);
+		}
+	}
+	
+	private int reverseDir(int dir) {
+		switch (dir) {
+		case IHole.NORTH:
+			dir = IHole.SOUTH;
+		case IHole.EAST:
+			dir = IHole.WEST;
+		case IHole.SOUTH:
+			dir = IHole.NORTH;
+		case IHole.WEST:
+			dir = IHole.EAST;
+		}
+		return dir;
 	}
 
 }
