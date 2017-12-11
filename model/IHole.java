@@ -46,6 +46,8 @@ public interface IHole {
 	public IHole getNearHole(int dir);
 	
 	
+	public int getXPos();
+	public int getYPos();
 	/**
 	 * getPosition renvoi juste une chaine de caractère correspondant à la position du trou sur le plateau.
 	 * La position ne doit pas être calculée à chaque fois, elle doit être enregistrée dans un attribut au constructeur.
@@ -122,4 +124,3 @@ public interface IHole {
 	
 	
 }
-

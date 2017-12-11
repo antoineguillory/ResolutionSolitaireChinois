@@ -22,12 +22,25 @@ import model.IHole;
  * 		$PRE$ i correspond à un schema de la factory
  * 		$POST$ pareil qu'au dessus
  */
-public interface IBoard {
+public interface IBoard  {
+	
+	/**
+	 * Tableau de base
+	 */
+	public static final int CLASSIC_TAB_NB = 1;
+	public static final int[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
+	
+	
+	public static final int LAST_TAB = 1;
+	
 	/**
 	 * getHoleSet renvoi l'ensemble des pegs du IBoard.
 	 * @inv : getHoleSet() != null
 	 */
 	public Set<IHole> getHoleSet();
+
+	public IBoard copie();
+
 	
 	
 	

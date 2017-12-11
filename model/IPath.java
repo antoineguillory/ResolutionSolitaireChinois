@@ -97,6 +97,7 @@ public interface IPath {
 	 * 			incrémenter Nb, modifier la Stringbuffer des mouvements
 	 * 			faire le mouvement (utiliser les méthodes de Hole)
 	 *			lancer computePath
+	 *			faire le mouvement inverse
 	 *			décrémenter tout ce qui a été incr précedément dans cette boucle,
 	 *			annuler le changement de la stringbuffer correspondant au chemin actuel.
 	 */

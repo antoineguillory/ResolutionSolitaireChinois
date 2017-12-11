@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +29,11 @@ public class HoleFactory {
 			}
 			return false;
 		}
+		
+		@Override
+		public int hashCode() {
+			return l + c;
+		}
 	}
 	
 	public static Set<IHole> generateBoardHoles(int[] badPos){
@@ -38,20 +44,30 @@ public class HoleFactory {
 					continue;
 				}
 				
-				IHole h = new Hole(computeName(i, j));
+				IHole h = new Hole(computeName(i, j), i, j);
 				data.put(new Pos(i, j), h);
-				if (data.containsKey(new Pos(i-1, j))) {
+				if (contains(data, new Pos(i - 1, j))) {
 					data.get(new Pos(i - 1, j)).setNearHole(IHole.SOUTH, h);
+					h.setNearHole(IHole.NORTH, data.get(new Pos(i - 1, j)));
 				}
-				if (data.containsKey(new Pos(i, j - 1))) {
+				if (contains(data, new Pos(i, j - 1))) {
 					data.get(new Pos(i, j - 1)).setNearHole(IHole.EAST, h);
+					h.setNearHole(IHole.WEST, data.get(new Pos(i, j - 1)));
 				}
 				
 			}
 		}
-		return (Set<IHole>) data.values();
+		return new HashSet<IHole> (data.values());
 	}
 	
+	private static boolean contains (Map<Pos, IHole> m, Pos p) {
+		Set<Pos> entry = m.keySet();
+		for (Pos po : entry) {
+			if(po.equals(p)) return true;
+		}
+		
+		return false;
+	}
 	private static boolean isIn (int [] t, int x) {
 		for (int i = 0; i < t.length; i++) {
 			if (x == t[i]) {
@@ -62,8 +78,8 @@ public class HoleFactory {
 	}
 	
 	private static String computeName (int i, int j) {
-		int c = columnBase + j;
-		int l = lineBase + i;
+		int c = lineBase + j;
+		int l = columnBase + i;
 		return "" + (char) l + (char) c;
 	}
 }
