@@ -28,9 +28,33 @@ public class Board implements IBoard {
 	
 	//METHODES
 
-	@Override
+
 	public Set<IHole> getHoleSet() {
 		return setHole;
+	}
+	
+	public IBoard copie(){
+		IBoard b = new Board();
+		for(IHole h : this.setHole) {
+			for(IHole nh : b.getHoleSet()) {
+				if(nh.getXPos() == h.getXPos() && nh.getYPos() == h.getYPos()) {
+					if(!h.pegIn()) nh.takePeg();
+				}
+			}
+		}
+		return b;
+	}
+	
+	public boolean equals(Object o) {
+		IBoard b = (IBoard) o;
+		for(IHole h : this.setHole) {
+			for(IHole nh : b.getHoleSet()) {
+				if(nh.getXPos() == h.getXPos() && nh.getYPos() == h.getYPos()) {
+					if(h.pegIn() != nh.pegIn()) return false;
+				}
+			}
+		}
+		return true;
 	}
 
 }
