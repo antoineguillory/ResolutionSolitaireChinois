@@ -22,6 +22,7 @@ public class Test {
 //				}
 //			}
 //		}
+
 		
 //		p.computePath();
 //		System.out.println("" + p.getBestNb() +"\n"

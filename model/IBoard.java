@@ -22,7 +22,8 @@ import model.IHole;
  * 		$PRE$ i correspond à un schema de la factory
  * 		$POST$ pareil qu'au dessus
  */
-public interface IBoard  {
+
+public interface IBoard {
 	
 	/**
 	 * Tableau de base

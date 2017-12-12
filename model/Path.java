@@ -32,58 +32,54 @@ public class Path implements IPath {
 	
 	//METHODES
 
-	
+	@Override
 	public IBoard getBoard() {
 		return board;
 	}
 
-	
+	@Override
 	public IHole getCurrentHole() {
 		return curHole;
 	}
 
-	
+	@Override
 	public int getBestNb() {
 		return bestNB;
 	}
 
-	
+	@Override
 	public StringBuffer getBestMoves() {
 		return bestMV;
 	}
 
-	
+	@Override
 	public int getNb() {
 		return curNB;
 	}
 
-	
+	@Override
 	public StringBuffer getMoves() {
 		return curMV;
 	}
-
-	
+  
+	@Override
 	public int getPegOutNb() {
 		return pegOutNB;
 	}
 
-	
+
+	@Override
 	public void computePath() {
-		if (getNb() >= getBestNb()) {
-			return;
-		}
 		if (getPegOutNb() == 32) {
-			System.out.println(getMoves());
 			if (getBestNb() > getNb()
 					&& getCurrentHole().getPosition() == pEnd) {
 				this.bestMV = this.curMV;
 				this.bestNB = this.curNB;
-				
 				return;
 			}
 		}
 		
-		// Recursivit� � peaufiner
+		// Recursivitï¿½ ï¿½ peaufiner
 		for (IHole h : board.getHoleSet()) {
 			for (int dir = IHole.NORTH; dir <= IHole.WEST; dir++) {
 				if (h.canMoveTo(dir)) {

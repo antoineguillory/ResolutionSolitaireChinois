@@ -28,6 +28,7 @@ public class Board implements IBoard {
 	
 	//METHODES
 
+
 	public Set<IHole> getHoleSet() {
 		return setHole;
 	}
