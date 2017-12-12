@@ -12,14 +12,17 @@ public class Hole implements IHole {
 	private boolean peg;
 	private Map<Integer, IHole> voisin;
 	private String pos;
-	
+	private int x;
+	private int y;
 	//CONSTRUCTEURS
 	
-	public Hole(String p) {
+	public Hole(String p, int x, int y) {
 		Contract.checkCondition(p != null);
 		voisin = new HashMap<Integer, IHole>();
 		peg = true;
 		pos = p;
+		this.x = x;
+		this.y = y;
 	}
 	
 	//METHODES
@@ -42,6 +45,7 @@ public class Hole implements IHole {
 		
 		return voisin.get(dir);
 	}
+
 
 	@Override
 	public String getPosition() {
@@ -135,14 +139,26 @@ public class Hole implements IHole {
 		switch (dir) {
 		case IHole.NORTH:
 			dir = IHole.SOUTH;
+			break;
 		case IHole.EAST:
 			dir = IHole.WEST;
+			break;
 		case IHole.SOUTH:
 			dir = IHole.NORTH;
+			break;
 		case IHole.WEST:
 			dir = IHole.EAST;
+			break;
 		}
 		return dir;
 	}
 
+
+	public int getXPos() {
+		return this.x;
+	}
+
+	public int getYPos() {
+		return this.y;
+	}
 }

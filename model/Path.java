@@ -22,7 +22,7 @@ public class Path implements IPath {
 			}
 		}
 		curHole = null;
-		bestNB = board.getHoleSet().size();
+		bestNB = 20;
 		bestMV = new StringBuffer("");
 		curNB = 0;
 		curMV = new StringBuffer("");
@@ -61,11 +61,12 @@ public class Path implements IPath {
 	public StringBuffer getMoves() {
 		return curMV;
 	}
-
+  
 	@Override
 	public int getPegOutNb() {
 		return pegOutNB;
 	}
+
 
 	@Override
 	public void computePath() {
@@ -77,11 +78,8 @@ public class Path implements IPath {
 				return;
 			}
 		}
-		if (getNb() >= getBestNb()) {
-			return;
-		}
 		
-		// Recursivit� � peaufiner
+		// Recursivitï¿½ ï¿½ peaufiner
 		for (IHole h : board.getHoleSet()) {
 			for (int dir = IHole.NORTH; dir <= IHole.WEST; dir++) {
 				if (h.canMoveTo(dir)) {
@@ -102,25 +100,28 @@ public class Path implements IPath {
 					}
 					// + double coup
 					for (int dir2 = IHole.NORTH; dir2 <= IHole.WEST; dir2++) {
-						if (this.getTwiceHoleFrom(h, dir).canMoveTo(dir2)) {
+						IHole dirh = this.getTwiceHoleFrom(h, dir);
+						if (	dirh.getNearHole(dir2) != null && this.getTwiceHoleFrom(dirh, dir2) != null &&
+								dirh.getNearHole(dir2).pegIn() && !this.getTwiceHoleFrom(dirh, dir2).pegIn()) {
 							String d2 = "";
 							switch (dir2) {
 							case IHole.NORTH:
-								d = "N";
+								d2 = "N";
 								break;
 							case IHole.EAST:
-								d = "E";
+								d2 = "E";
 								break;
 							case IHole.SOUTH:
-								d = "S";
+								d2 = "S";
 								break;
 							case IHole.WEST:
-								d = "W";
+								d2 = "W";
 								break;
 							}
 							this.pegOutNB += 2;
 							this.curNB += 1;
 							this.curHole = getTwiceHoleFrom(getTwiceHoleFrom(h, dir), dir2);
+							IHole old = curHole;
 							this.curMV.append(h.getPosition() 
 									+ d 
 									+ getTwiceHoleFrom(h, dir).getPosition()
@@ -130,7 +131,7 @@ public class Path implements IPath {
 							h.jumpTo(dir);
 							getTwiceHoleFrom(h, dir).jumpTo(dir2);
 							computePath();
-							curHole.undoJump(reverseDir(dir2));
+							old.undoJump(reverseDir(dir2));
 							getTwiceHoleFrom(h, dir).undoJump(reverseDir(dir));
 							this.curHole = h;
 							this.pegOutNB -= 2;
@@ -141,6 +142,7 @@ public class Path implements IPath {
 					
 					this.pegOutNB += 1;
 					this.curNB += 1;
+					IHole oldHole = this.curHole;
 					this.curHole = getTwiceHoleFrom(h, dir);
 					this.curMV.append(h.getPosition() 
 							+ d 
@@ -148,8 +150,8 @@ public class Path implements IPath {
 							+ ";");
 					h.jumpTo(dir);
 					computePath();
-					curHole.undoJump(reverseDir(dir));
-					this.curHole = h;
+					getTwiceHoleFrom(h, dir).undoJump(reverseDir(dir));
+					this.curHole = oldHole;
 					this.pegOutNB -= 1;
 					this.curNB -= 1;
 					this.curMV = this.curMV.delete(curMV.length() - 6, curMV.length());
@@ -168,12 +170,16 @@ public class Path implements IPath {
 		switch (dir) {
 		case IHole.NORTH:
 			dir = IHole.SOUTH;
+			break;
 		case IHole.EAST:
 			dir = IHole.WEST;
+			break;
 		case IHole.SOUTH:
 			dir = IHole.NORTH;
+			break;
 		case IHole.WEST:
 			dir = IHole.EAST;
+			break;
 		}
 		return dir;
 	}

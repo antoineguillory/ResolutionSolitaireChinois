@@ -22,6 +22,7 @@ import model.IHole;
  * 		$PRE$ i correspond à un schema de la factory
  * 		$POST$ pareil qu'au dessus
  */
+
 public interface IBoard {
 	
 	/**
@@ -38,6 +39,9 @@ public interface IBoard {
 	 * @inv : getHoleSet() != null
 	 */
 	public Set<IHole> getHoleSet();
+
+	public IBoard copie();
+
 	
 	
 	
