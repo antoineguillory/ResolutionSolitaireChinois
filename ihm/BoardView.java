@@ -10,8 +10,16 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import util.Move;
 
 public class BoardView {
 	/* REMINDER 
@@ -25,6 +33,8 @@ public class BoardView {
 	 * 
 	 */
 	public static final Integer[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
+		
+	private LinkedList<Move> configuration;
 	
 	private JFrame MainWindow;
 	private JPanel MainPanel;
@@ -130,8 +140,6 @@ public class BoardView {
 	private void addBadButton(){
 		GridJButton badBtn = new GridJButton(Orange_Tile, 0);
 		badBtn.setPreferredSize(new Dimension(30,30));
-		badBtn.setForeground(Color.RED);
-		badBtn.setBackground(Color.RED);
 		CGL.add(badBtn);
 	}
 	
@@ -190,8 +198,20 @@ public class BoardView {
 			public void actionPerformed(ActionEvent e){
 				StartBtn.setEnabled(false);
 				EndBtn.setEnabled(false);
-				initializeGrid();
-				//calcul... TODO
+				System.out.println("DEBUG : pour l'instant le wrapper ne prend en compte qu'un coup de test ! départ et arrivée redéfinis.");
+				//Pour les biens du test : départ et arrivée set manuellement
+				initializeGrid(); //reset grid
+				ChosenStart.setText("17");
+				ChosenEnd.setText("23");
+				GridJButton pointedEnd = GridButtons.get(23);
+				resetImages();
+				pointedEnd.setIcon(End_Tile);
+				pointedEnd.setState(IHMState.SET_END);
+				GridJButton pointedStart = GridButtons.get(17);
+				pointedStart.setIcon(Empty_Tile);
+				pointedStart.setState(IHMState.SET_START);
+				// Toute cette partie ci dessus est a virer quand on sera plus en mode test	
+				
 			}
 		});
 		
