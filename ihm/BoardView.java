@@ -18,15 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import util.BoardsTypes;
 import util.Move;
 import util.Wrapper;
 
 public class BoardView {
-	/* REMINDER 
-	 * 
+	/*  
 	 * IHM have to look like
 	 * BL -> N -> FL -> (LBL , FL -> BTON BTON)
 	 * 	  -> C -> GL(7x7) -> BTON
@@ -35,7 +33,8 @@ public class BoardView {
 	 * 
 	 * 
 	 */
-	public static final Integer[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
+	private int type;
+	private Integer[] badposprimitive;
 		
 	private LinkedList<Move> movesToExplore;
 	private LinkedList<Move> movesAlreadyExplored;
@@ -64,7 +63,9 @@ public class BoardView {
 	/*
 	 * @author Antoine Guillory
 	 */
-	public BoardView(){
+	public BoardView(int type){
+		this.type = type;
+		badposprimitive = BoardsTypes.badpositions(type);
 		state = IHMState.DO_NOTHING;
 		movesToExplore = new LinkedList<Move>();
 		movesAlreadyExplored = new LinkedList<Move>();
@@ -142,7 +143,7 @@ public class BoardView {
 		GridLayout manager = new GridLayout(7,7);
 		CGL = new JPanel(manager);{
 			ArrayList<Integer> badPos= new ArrayList<Integer>();
-			badPos.addAll(Arrays.asList(BAD_POS_PRIMITIVE));
+			badPos.addAll(Arrays.asList(badposprimitive));
 			Integer realNumerotation=1;
 			for(Integer i = 0; i!=49;++i){
 				if(badPos.contains(i)){
@@ -225,7 +226,7 @@ public class BoardView {
 				pointedStart.setIcon(Empty_Tile);
 				pointedStart.setState(IHMState.SET_START);
 				ConfirmBtn.setEnabled(false);
-				movesToExplore = Wrapper.getMoves(Wrapper.sample, BoardsTypes.PLATEAU1);
+				movesToExplore = Wrapper.getMoves(Wrapper.sample, type);
 				BestShot.setText(Integer.toString(movesToExplore.size()));
 				nextStep.setEnabled(true);
 				// Toute cette partie ci dessus est a virer quand on sera plus en mode test	
@@ -333,15 +334,4 @@ public class BoardView {
 	public HashMap<Integer, GridJButton> getButtons() {
 		return GridButtons;
 	}
-	
-	
-	
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new BoardView();
-            }
-        });
-    }
 }

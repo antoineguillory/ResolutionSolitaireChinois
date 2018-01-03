@@ -6,10 +6,10 @@ import java.util.Map;
 public class BoardsTypes {
 	public final static int PLATEAU1 = 1;
 	public final static int PLATEAU2 = 2;
-	private static final int BadPos1[] =  {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
-	private static final int BadPos2[]  = {0,1,5,6,7,13,35,41,42,43,47,48};
+	private static final Integer BadPos1[] =  {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
+	private static final Integer BadPos2[]  = {0,1,5,6,7,13,35,41,42,43,47,48};
 	
-	public static int[] badpositions(int type) {
+	public static Integer[] badpositions(Integer type) {
 		switch(type) {
 		case PLATEAU1:
 			return BadPos1;
@@ -20,9 +20,9 @@ public class BoardsTypes {
 		}
 	}
 	
-	public static Map<String, Integer> bijection (int type) {
+	public static Map<String, Integer> bijection (Integer type) {
 		int k = 1;
-		int b[] = badpositions(type);
+		Integer b[] = badpositions(type);
 		Map<String,Integer> m = new HashMap<String, Integer>();
 		for(int i = 0; i < 7; i++) {
 			for(int j = 0; j < 7; j++) {
@@ -40,7 +40,7 @@ public class BoardsTypes {
 	}
 	
 	
-	private static boolean inArrayint(int a, int t[]) {
+	private static boolean inArrayint(Integer a, Integer t[]) {
 		for (int i : t) {
 			if (i == a) return true;
 		}

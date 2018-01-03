@@ -16,22 +16,22 @@ public class Wrapper {
 		LinkedList<Move> l = new LinkedList<Move>();
 		Map<String, Integer> m = BoardsTypes.bijection(typeofBoard);
 		while (st.hasMoreTokens()) {
-			String s = st.nextToken();
-			if (s.length() > 6) {
-				String start = s.substring(0, 2);
-				String dir1 = s.substring(2, 3);
-				String mid = s.substring(3, 5);
-				String dir2 = s.substring(5, 6);
-				String end = s.substring(6, 8);
-				Set<Integer> set = new HashSet<Integer>();
-				set.add(m.get(start));
-				set.add(m.get(dirmove(start, dir1)));
-				set.add(m.get(mid));
-				set.add(m.get(dirmove(start, dir2)));
-				int sta = m.get(start);
-				int en = m.get(end);
-				Move entry = new Move(sta, en, set);
-				l.addFirst(entry);
+            String s = st.nextToken();
+            if(s.length() > 6) {
+                String start = s.substring(0, 2);
+                String dir1 = s.substring(2, 3);
+                String mid = s.substring(3, 5);
+                String dir2 = s.substring(5, 6);
+                String end = s.substring(6, 8);
+                Set<Integer> set = new HashSet<Integer>();
+                set.add(m.get(start));
+                set.add(m.get(dirmove(start, dir1)));
+                set.add(m.get(mid));
+                set.add(m.get(dirmove(mid, dir2)));
+                int sta = m.get(start);
+                int en = m.get(end);
+                Move entry = new Move(sta, en, set);
+                l.addFirst(entry);
 			} else {
 				String start = s.substring(0, 2);
 				String dir1 = s.substring(2, 3);
