@@ -11,7 +11,10 @@ public interface IHeurPath {
 	
 
 	
-	
+	/**
+	 * Méthode à utiliser pour générer le best move. 
+	 * 
+	 */
 	public void calculPath();
 	
 	
