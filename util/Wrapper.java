@@ -33,7 +33,6 @@ public class Wrapper {
 				Set<Integer> set = new HashSet<Integer>();
 				set.add(m.get(start));
 				set.add(m.get(dirmove(start, dir1)));
-				set.add(m.get(mid));
 				set.add(m.get(dirmove(mid, dir2)));
 				int sta = m.get(start);
 				int en = m.get(end);
