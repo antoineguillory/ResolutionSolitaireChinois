@@ -137,6 +137,7 @@ public class BoardView {
 						ResetBtn = new JButton("Reset");
 						SBLS.add(ResetBtn);
 						ConfirmBtn = new JButton("Confirm");
+						ConfirmBtn.setEnabled(false);
 						SBLS.add(ConfirmBtn);
 						previousStep = new JButton("Previous step");
 						previousStep.setEnabled(false);
@@ -195,6 +196,7 @@ public class BoardView {
 					ChosenStart.setText(((GridJButton) e.getSource()).getNumerotation().toString());
 					GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenStart.getText()));
 					resetImages();
+					ConfirmBtn.setEnabled(false);
 					pointedBtn.setIcon(Empty_Tile);
 					pointedBtn.setState(state);
 					state = IHMState.DO_NOTHING;
@@ -203,6 +205,7 @@ public class BoardView {
 					ChosenEnd.setText(((GridJButton) e.getSource()).getNumerotation().toString());
 					GridJButton pointedBtn = GridButtons.get(Integer.parseInt(ChosenEnd.getText()));
 					pointedBtn.setIcon(End_Tile);
+					ConfirmBtn.setEnabled(true);
 					pointedBtn.setState(state);
 					state = IHMState.DO_NOTHING;
 				}
@@ -224,21 +227,11 @@ public class BoardView {
 		StartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				state = IHMState.SET_START;
-				if (ChosenStart.getText().equals("") || ChosenEnd.getText().equals("")) {
-					ConfirmBtn.setEnabled(false);
-				} else {
-					ConfirmBtn.setEnabled(true);
-				}
 			}
 		});
 		EndBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				state = IHMState.SET_END;
-				if (ChosenStart.getText().equals("") || ChosenEnd.getText().equals("")) {
-					ConfirmBtn.setEnabled(false);
-				} else {
-					ConfirmBtn.setEnabled(true);
-				}
 			}
 		});
 
@@ -260,7 +253,7 @@ public class BoardView {
 							"L'Heuristique n'a pas trouvé de solutions...");
 
 				} finally {
-					BestShot.setText(Integer.toString(movesToExplore.size()-1));
+					BestShot.setText(Integer.toString(movesToExplore.size() - 1));
 					nextStep.setEnabled(true);
 				}
 			}
