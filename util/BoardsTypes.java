@@ -51,6 +51,15 @@ public class BoardsTypes {
 		return m;
 	}
 	
+	public static Map<Integer, String> bijection2 (Integer type) {
+		Map <String, Integer> m = bijection (type);
+		Map <Integer, String> ret = new HashMap<Integer, String>();
+		for(String s : m.keySet()) {
+			ret.put(m.get(s), s);
+		}
+		return ret;
+    	}
+	
 	
 	private static boolean inArrayint(Integer a, Integer t[]) {
 		for (int i : t) {
