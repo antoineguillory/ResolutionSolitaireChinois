@@ -10,12 +10,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import util.BoardsTypes;
+import util.Move;
+import util.Wrapper;
 
 public class BoardView {
-	/* REMINDER 
-	 * 
+	/*  
 	 * IHM have to look like
 	 * BL -> N -> FL -> (LBL , FL -> BTON BTON)
 	 * 	  -> C -> GL(7x7) -> BTON
@@ -24,7 +33,11 @@ public class BoardView {
 	 * 
 	 * 
 	 */
-	public static final Integer[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
+	private int type;
+	private Integer[] badposprimitive;
+		
+	private LinkedList<Move> movesToExplore;
+	private LinkedList<Move> movesAlreadyExplored;
 	
 	private JFrame MainWindow;
 	private JPanel MainPanel;
@@ -36,8 +49,11 @@ public class BoardView {
 				private JLabel ChosenEnd;
 				private JButton ResetBtn;
 				private JButton ConfirmBtn;
+				private JButton nextStep;
+				private JButton previousStep;
 				
 	private HashMap<Integer, GridJButton> GridButtons;
+	private ImageIcon Application_Icon;
 	private ImageIcon Empty_Tile;
 	private ImageIcon Filled_Tile;
 	private ImageIcon Orange_Tile;
@@ -47,11 +63,17 @@ public class BoardView {
 	/*
 	 * @author Antoine Guillory
 	 */
-	public BoardView(){
+	public BoardView(int type){
+		this.type = type;
+		badposprimitive = BoardsTypes.badpositions(type);
 		state = IHMState.DO_NOTHING;
+		movesToExplore = new LinkedList<Move>();
+		movesAlreadyExplored = new LinkedList<Move>();
+
 		initializeImages();
 		initializeComponents();
 		defineListeners();
+        MainWindow.setIconImage(Application_Icon.getImage());
 	}
 	
 	private void initializeImages(){
@@ -59,6 +81,7 @@ public class BoardView {
 		Filled_Tile = new ImageIcon("img/filled_tile.png");
 		Orange_Tile = new ImageIcon("img/orange_tile.png");
 		End_Tile = new ImageIcon ("img/end_tile.png");
+		Application_Icon = new ImageIcon("img/solitaire.png");
 	}
 	
 	private void initializeComponents(){
@@ -98,7 +121,14 @@ public class BoardView {
 						SBLS.add(ResetBtn);
 						ConfirmBtn = new JButton("Confirm");
 						SBLS.add(ConfirmBtn);
+						previousStep = new JButton("Previous step");
+						previousStep.setEnabled(false);
+						SBLS.add(previousStep);
+						nextStep = new JButton("Next step");
+						nextStep.setEnabled(false);
+						SBLS.add(nextStep);
 						SBL.add(SBLS, BorderLayout.SOUTH);
+						
 					}
 				}
 				MainPanel.add(SBL, BorderLayout.SOUTH);
@@ -113,7 +143,7 @@ public class BoardView {
 		GridLayout manager = new GridLayout(7,7);
 		CGL = new JPanel(manager);{
 			ArrayList<Integer> badPos= new ArrayList<Integer>();
-			badPos.addAll(Arrays.asList(BAD_POS_PRIMITIVE));
+			badPos.addAll(Arrays.asList(badposprimitive));
 			Integer realNumerotation=1;
 			for(Integer i = 0; i!=49;++i){
 				if(badPos.contains(i)){
@@ -130,8 +160,6 @@ public class BoardView {
 	private void addBadButton(){
 		GridJButton badBtn = new GridJButton(Orange_Tile, 0);
 		badBtn.setPreferredSize(new Dimension(30,30));
-		badBtn.setForeground(Color.RED);
-		badBtn.setBackground(Color.RED);
 		CGL.add(badBtn);
 	}
 	
@@ -165,12 +193,8 @@ public class BoardView {
 	
 	private void resetImages() {
 		for(GridJButton but: GridButtons.values()){
-			if(but.getState()==IHMState.DO_NOTHING) 
-				continue;
-			else if(but.getState()==IHMState.SET_START && state==IHMState.SET_START)
-				but.setIcon(Filled_Tile);
-			else if(but.getState()==IHMState.SET_END && state==IHMState.SET_END)
-				but.setIcon(Filled_Tile);
+			but.setIcon(Filled_Tile);
+			but.setState(IHMState.DO_NOTHING);
 		}
 	}
 	
@@ -190,26 +214,124 @@ public class BoardView {
 			public void actionPerformed(ActionEvent e){
 				StartBtn.setEnabled(false);
 				EndBtn.setEnabled(false);
-				initializeGrid();
-				//calcul... TODO
+				System.out.println("DEBUG : pour l'instant le wrapper ne prend en compte qu'un coup de test ! départ et arrivée redéfinis.");
+				//Pour les biens du test : départ et arrivée set manuellement
+				resetImages();
+				ChosenStart.setText("17");
+				ChosenEnd.setText("23");
+				GridJButton pointedEnd = GridButtons.get(23);
+				pointedEnd.setIcon(End_Tile);
+				pointedEnd.setState(IHMState.SET_END);
+				GridJButton pointedStart = GridButtons.get(17);
+				pointedStart.setIcon(Empty_Tile);
+				pointedStart.setState(IHMState.SET_START);
+				ConfirmBtn.setEnabled(false);
+				movesToExplore = Wrapper.getMoves(Wrapper.sample, type);
+				BestShot.setText(Integer.toString(movesToExplore.size()));
+				nextStep.setEnabled(true);
+				// Toute cette partie ci dessus est a virer quand on sera plus en mode test	
 			}
 		});
 		
+		nextStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				
+				Iterator<Move> it = movesToExplore.iterator();
+				Iterator<Move> it2 = movesAlreadyExplored.iterator();
+				System.out.println("ETAT PILE CURR");
+				while(it.hasNext()){
+					Move mv = it.next();
+					System.out.println("{START : "+Integer.toString(mv.getStart())+
+								 "{END : "+Integer.toString(mv.getEnd()));
+				}
+				System.out.println("ETAT PILE ALREADY");
+				while(it2.hasNext()){
+					Move mv = it2.next();
+					System.out.println("{START : "+Integer.toString(mv.getStart())+
+								 "{END : "+Integer.toString(mv.getEnd()));
+				}
+				
+				if(!movesToExplore.isEmpty()){
+					Move currMove = movesToExplore.removeLast();
+					movesAlreadyExplored.addLast(currMove);
+					for(Integer i : currMove.getRemoved()){
+						System.out.println("NEXT : To remove(set)"+Integer.toString(i));
+						GridButtons.get(i).setIcon(Empty_Tile);
+					}
+					System.out.println("NEXT : To add(end)"+ Integer.toString(currMove.getEnd()));
+					GridButtons.get(currMove.getEnd()).setIcon(Filled_Tile);
+					//MainWindow.repaint();
+				}else{
+					nextStep.setEnabled(false);
+					previousStep.setEnabled(true);
+				}
+				
+				if(!movesToExplore.isEmpty()){
+					previousStep.setEnabled(true);
+				}
+			}
+		});
+		
+		previousStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				
+				Iterator<Move> it = movesToExplore.iterator();
+				Iterator<Move> it2 = movesAlreadyExplored.iterator();
+				System.out.println("ETAT PILE CURR");
+				while(it.hasNext()){
+					Move mv = it.next();
+					System.out.println("{START : "+Integer.toString(mv.getStart())+
+								 "{END : "+Integer.toString(mv.getEnd()));
+				}
+				System.out.println("ETAT PILE ALREADY");
+				while(it2.hasNext()){
+					Move mv = it2.next();
+					System.out.println("{START : "+Integer.toString(mv.getStart())+
+								 "{END : "+Integer.toString(mv.getEnd()));
+				}
+				
+				if(!movesAlreadyExplored.isEmpty()){
+					Move currMove = movesAlreadyExplored.removeLast();
+					movesToExplore.addLast(currMove);
+				  	for(Integer i : currMove.getRemoved()){
+						System.out.println("PREVIOUS : To add(set) : "+ Integer.toString(i));
+						GridButtons.get(i).setIcon(Filled_Tile);
+					}
+					System.out.println("PREVIOUS : To remove(end)"+ Integer.toString(currMove.getEnd()));
+					GridButtons.get(currMove.getEnd()).setIcon(Empty_Tile);
+					//MainWindow.repaint();
+				}else{
+					nextStep.setEnabled(true);
+					previousStep.setEnabled(false);
+				}
+				if(!movesToExplore.isEmpty()){
+					nextStep.setEnabled(true);
+				}
+			}
+		});
+		
+		ResetBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				resetImages();
+				ChosenEnd.setText("");
+				ChosenStart.setText("");
+				EndBtn.setEnabled(true);
+				StartBtn.setEnabled(true);
+				//reset des listes
+				movesAlreadyExplored = new LinkedList<Move>();
+				movesToExplore = new LinkedList<Move>();
+				previousStep.setEnabled(false);
+				nextStep.setEnabled(false);
+				
+				
+				//DEBUG : ENSUITE A RETIRER
+				ConfirmBtn.setEnabled(true);
+			}
+		});
 	}
 	
 	
 	public HashMap<Integer, GridJButton> getButtons() {
 		return GridButtons;
 	}
-	
-	
-	
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new BoardView();
-            }
-        });
-    }
 }
