@@ -32,54 +32,58 @@ public class Path implements IPath {
 	
 	//METHODES
 
-	@Override
+	
 	public IBoard getBoard() {
 		return board;
 	}
 
-	@Override
+	
 	public IHole getCurrentHole() {
 		return curHole;
 	}
 
-	@Override
+	
 	public int getBestNb() {
 		return bestNB;
 	}
 
-	@Override
+	
 	public StringBuffer getBestMoves() {
 		return bestMV;
 	}
 
-	@Override
+	
 	public int getNb() {
 		return curNB;
 	}
 
-	@Override
+	
 	public StringBuffer getMoves() {
 		return curMV;
 	}
-  
-	@Override
+
+	
 	public int getPegOutNb() {
 		return pegOutNB;
 	}
 
-
-	@Override
+	// Ici on teste toute les possibilités du plateau récursivement
 	public void computePath() {
+		if (getNb() >= getBestNb()) {
+			return;
+		}
+		//Condition d'arrêt
 		if (getPegOutNb() == 32) {
+			System.out.println(getMoves());
 			if (getBestNb() > getNb()
 					&& getCurrentHole().getPosition() == pEnd) {
 				this.bestMV = this.curMV;
 				this.bestNB = this.curNB;
+				
 				return;
 			}
 		}
-		
-		// Recursivitï¿½ ï¿½ peaufiner
+		//Pour chaque trou vide on teste un coup
 		for (IHole h : board.getHoleSet()) {
 			for (int dir = IHole.NORTH; dir <= IHole.WEST; dir++) {
 				if (h.canMoveTo(dir)) {
@@ -118,6 +122,7 @@ public class Path implements IPath {
 								d2 = "W";
 								break;
 							}
+							//Ici on simule un coup en modifiant l'état du plateau, le nombre de coup actuel
 							this.pegOutNB += 2;
 							this.curNB += 1;
 							this.curHole = getTwiceHoleFrom(getTwiceHoleFrom(h, dir), dir2);
@@ -130,6 +135,7 @@ public class Path implements IPath {
 									+ ";");
 							h.jumpTo(dir);
 							getTwiceHoleFrom(h, dir).jumpTo(dir2);
+							//On relance l'appel récursif (plus de détail dans le dossier)
 							computePath();
 							old.undoJump(reverseDir(dir2));
 							getTwiceHoleFrom(h, dir).undoJump(reverseDir(dir));

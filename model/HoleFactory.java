@@ -5,10 +5,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/*
+ * HoleFactory : Outil pour créer directement tout les trous d'un plateau tout
+ * en liant les trous entre eux.
+ * 
+ * On genère un plateau 7x7 uniquement
+ */
 public class HoleFactory {
 	private static int columnBase = 'a';
 	private static int lineBase = '1';
 	
+	/*
+	 *  Un outil pour donner une position aux trous, afin de gérer les liens entre eux
+	 */
 	private static class Pos {
 		public int l;
 		public int c;
@@ -35,7 +44,10 @@ public class HoleFactory {
 			return l + c;
 		}
 	}
-	
+	/*
+	 * On génère, à partir d'un plateau d'entier (primitif) correspondant aux
+	 * mauvaises positions du plateau.
+	 */
 	public static Set<IHole> generateBoardHoles(int[] badPos){
 		Map <Pos, IHole> data = new HashMap <Pos, IHole>();
 		for (int i = 0; i < 7; i++) {
@@ -60,6 +72,7 @@ public class HoleFactory {
 		return new HashSet<IHole> (data.values());
 	}
 	
+	
 	private static boolean contains (Map<Pos, IHole> m, Pos p) {
 		Set<Pos> entry = m.keySet();
 		for (Pos po : entry) {
@@ -68,6 +81,8 @@ public class HoleFactory {
 		
 		return false;
 	}
+	
+	// On verifie si une position est définie dans le tableau des mauvaises positions à l'aide de cette fonction.
 	private static boolean isIn (int [] t, int x) {
 		for (int i = 0; i < t.length; i++) {
 			if (x == t[i]) {
@@ -77,6 +92,8 @@ public class HoleFactory {
 		return false;
 	}
 	
+	
+	//On donne le nom du trou en fonction de sa position
 	private static String computeName (int i, int j) {
 		int c = lineBase + j;
 		int l = columnBase + i;

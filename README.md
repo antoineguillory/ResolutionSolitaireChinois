@@ -15,7 +15,7 @@ centrale, d’un plateau à forme de croix, comme le montre la figure ci-dessous
         • • •
         • • •
         
-Un coup consiste dans le d´eplacement d’une bille qui en saute une autre,
+Un coup consiste dans le déplacement d’une bille qui en saute une autre,
 en horizontal ou en vertical mais pas en diagonal, en allant occuper la case
 vide qui est située derrière. La bille sautée est retirée du plateau.
 Le but de ce projet est de programmer par rebroussement, une intelligence
