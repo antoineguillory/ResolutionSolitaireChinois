@@ -24,7 +24,7 @@ public class Home {
 		
 		mainPanel.setVisible(true);
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
+		
 		JButton type1 = new JButton("Type 1");
 		JButton type2 = new JButton("Type 2");
 		

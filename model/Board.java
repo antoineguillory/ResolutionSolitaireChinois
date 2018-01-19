@@ -2,6 +2,7 @@ package model;
 
 import java.util.Set;
 
+import util.BoardsTypes;
 import util.Contract;
 
 public class Board implements IBoard {
@@ -19,11 +20,7 @@ public class Board implements IBoard {
 	public Board(int i) {
 		Contract.checkCondition(1 <= i && i <= IBoard.LAST_TAB);
 		
-		switch (i) {
-		case IBoard.CLASSIC_TAB_NB:
-			setHole = HoleFactory.generateBoardHoles(IBoard.BAD_POS_PRIMITIVE);
-			break;
-		}
+		setHole = HoleFactory.generateBoardHoles(convert(BoardsTypes.badpositions(i)));
 	}
 	
 	//METHODES
@@ -32,8 +29,8 @@ public class Board implements IBoard {
 		return setHole;
 	}
 	
-	public IBoard copie(){
-		IBoard b = new Board();
+	public IBoard copie(int i){
+		IBoard b = new Board(i);
 		for(IHole h : this.setHole) {
 			for(IHole nh : b.getHoleSet()) {
 				if(nh.getXPos() == h.getXPos() && nh.getYPos() == h.getYPos()) {
@@ -54,6 +51,18 @@ public class Board implements IBoard {
 			}
 		}
 		return true;
+	}
+	
+	//OUTIL
+	//Pour passer d'un tableau d'Integer à un int[]
+	private int [] convert (Integer[] t) {
+		int [] ret = new int[49];
+		int k = 0;
+		for(Integer i : t) {
+			ret[k] = i;
+			k++;
+		}
+		return ret;
 	}
 
 }

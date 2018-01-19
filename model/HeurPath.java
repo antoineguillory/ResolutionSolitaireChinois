@@ -19,11 +19,13 @@ public class HeurPath implements IHeurPath {
 	private Set futurPool;	//PAREIL
 	private Map <IBoard, Double> futurPoolHeur;
 	private Map <IBoard, StringBuffer> moves;
+	private Integer type;
 
 	//CONSTRUCTEURS
 	
 	public HeurPath(int i, String start, String end) {
 		IBoard b = new Board(i);
+		type = i;
 		for (IHole h: b.getHoleSet()) {
 			if (h.getPosition().compareTo(start) == 0) {
 				h.takePeg();
@@ -76,7 +78,7 @@ public class HeurPath implements IHeurPath {
 			}
 			//Si on a de la place on ajoute juste le plateau sans plus de test.
 			if (this.futurPool.size() < this.nbBoard) {
-				IBoard cpy = b.copie();
+				IBoard cpy = b.copie(type);
 				this.futurPoolHeur.put(cpy, heuri);
 				this.moves.put(cpy, new StringBuffer(s));
 				this.futurPool.add(cpy);
@@ -86,7 +88,7 @@ public class HeurPath implements IHeurPath {
 			//Si c'est le cas on ajoute b et on retire le board à l'heuristique la moins bonne.
 			for(Double d : futurPoolHeur.values())  {
 				if (heuri < d) {
-					IBoard cpy = b.copie();
+					IBoard cpy = b.copie(type);
 					this.futurPoolHeur.put(cpy, heuri);
 					this.moves.put(cpy, new StringBuffer(s));
 					this.futurPool.add(cpy);
@@ -108,7 +110,7 @@ public class HeurPath implements IHeurPath {
 			moves.remove(bmax);
 			
 		} else {
-			IBoard cpy = b.copie();
+			IBoard cpy = b.copie(type);
 			this.futurPoolHeur.put(cpy, heuri);
 			this.moves.put(cpy, new StringBuffer(s));
 			this.futurPool.add(cpy);
@@ -235,7 +237,7 @@ public class HeurPath implements IHeurPath {
 			}
 			System.out.println("i = " + i +" size futurpool " + futurPool.size());
 			i++;
-		} while(i < 28);
+		} while(!currentPool.isEmpty());
 	}
 	
 	//OUTILS

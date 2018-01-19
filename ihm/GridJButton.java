@@ -12,10 +12,13 @@ public class GridJButton extends JButton {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	//ID par rapport a l'IHM
 	private Integer numerotation;
+	
+	//Etat courant du bouton
 	private IHMState state;
 
-	
+	//Contructeur
 	public GridJButton(ImageIcon icn, Integer numerotation){
 		super(icn);
 		this.setOpaque(true);
@@ -30,6 +33,7 @@ public class GridJButton extends JButton {
 		this.repaint();
 	}
 	
+	//Change l'icone courante
 	public void setIcon(ImageIcon icn){
 		super.setIcon(icn);
 		Color col = new Color(255,128,0);

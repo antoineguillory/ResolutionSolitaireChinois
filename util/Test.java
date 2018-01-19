@@ -12,11 +12,7 @@ public class Test {
 		while(l.size() != 0) {
 			if(l.getFirst() != null) {
 				Move m = (Move) l.getLast();
-				System.out.print(m.getStart());
-						for(Integer i : m.getRemoved()) {
-							System.out.print(" " + i);
-						}
-				System.out.print(" " + m.getEnd() + '\n');
+				System.out.println(m.getStart() + " " + m.getEnd());
 				l.removeLast();
 			}
 		}

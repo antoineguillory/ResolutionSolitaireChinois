@@ -31,7 +31,7 @@ public interface IBoard  {
 	public static final int[] BAD_POS_PRIMITIVE = {0,1,5,6,7,8,12,13,35,36,40,41,42,43,47,48};
 	
 	
-	public static final int LAST_TAB = 1;
+	public static final int LAST_TAB = 2;
 	
 	/**
 	 * getHoleSet renvoi l'ensemble des pegs du IBoard.
@@ -39,7 +39,7 @@ public interface IBoard  {
 	 */
 	public Set<IHole> getHoleSet();
 
-	public IBoard copie();
+	public IBoard copie(int i);
 
 	
 	
